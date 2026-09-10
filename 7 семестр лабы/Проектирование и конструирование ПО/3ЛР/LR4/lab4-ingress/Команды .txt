@@ -1,0 +1,22 @@
+kubectl port-forward -n ingress-nginx service/ingress-nginx-controller 8080:80
+
+kubectl port-forward -n monitoring svc/prometheus-grafana 8081:80
+
+Write-Host "Запускаем 30 запросов..." -ForegroundColor Yellow
+
+for ($i = 1; $i -le 30; $i++) {
+     curl.exe -s http://localhost:8080/main/ > $null
+     curl.exe -s http://localhost:8080/clients/ > $null
+     Write-Host "Запрос $i отправлен" -ForegroundColor Cyan
+     Start-Sleep -Milliseconds 250
+}
+
+Write-Host "=== ТЕСТ ROUND ROBIN ЗАВЕРШЕН ===" -ForegroundColor Green
+
+
+
+for ($i = 1; $i -le 20; $i++) {
+     curl.exe -s http://localhost:8080/main/ > $null
+     Write-Host "Фоновый запрос $i" -ForegroundColor Gray
+     Start-Sleep -Milliseconds 1000
+}

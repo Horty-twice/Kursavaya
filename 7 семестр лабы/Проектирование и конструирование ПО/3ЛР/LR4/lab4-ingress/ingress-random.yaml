@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: lr4-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/load-balance: "random"
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /main
+        pathType: Prefix
+        backend:
+          service:
+            name: lr4-main-service
+            port:
+              number: 80
+      - path: /clients
+        pathType: Prefix
+        backend:
+          service:
+            name: lr4-clients-service
+            port:
+              number: 80

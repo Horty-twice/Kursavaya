@@ -1,0 +1,39 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: lr4-main-monitor
+  namespace: monitoring
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: lr4-main
+  namespaceSelector:
+    matchNames:
+    - default
+  endpoints:
+  - port: http-metrics      # ← использует named port из Service
+    path: /metrics
+    interval: 15s
+    # targetPort: 7283      # ← УДАЛИТЬ эту строку
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: lr4-clients-monitor
+  namespace: monitoring
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: lr4-clients
+  namespaceSelector:
+    matchNames:
+    - default
+  endpoints:
+  - port: http-metrics      # ← использует named port из Service
+    path: /metrics
+    interval: 15s
+    # targetPort: 7232      # ← УДАЛИТЬ эту строку

@@ -1,0 +1,6 @@
+@LR4.Clients_HostAddress = http://localhost:5189
+
+GET {{LR4.Clients_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

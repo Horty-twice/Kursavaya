@@ -1,0 +1,20 @@
+TRUNCATE TABLE 
+    library, 
+    reader, 
+    book, 
+    author, 
+    genre, 
+    supplier, 
+    position,
+    reader_status, 
+    issue_status, 
+    issue_item_status, 
+    book_copy_status, 
+    purchase_request_status, 
+    purchase_request_item_status, 
+    supply_status, 
+    supply_item_status, 
+    manager_request_status, 
+    fine_status, 
+    fine_reason
+RESTART IDENTITY CASCADE;

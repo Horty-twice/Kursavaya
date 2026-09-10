@@ -1,0 +1,55 @@
+БЫСТРЫЙ СТАРТ (основные команды)
+# 1. Запуск кластера
+minikube start --driver=docker --nodes=2
+
+# 2. Загрузка образов
+minikube image load lr4-main:latest
+minikube image load lr4-clients:latest
+
+# 3. Запуск приложений
+kubectl apply -f deployment.yaml
+
+# 4. Запуск мониторинга
+kubectl create namespace monitoring
+helm upgrade --install prometheus prometheus-community/kube-prometheus-stack -n monitoring
+kubectl apply -f monitoring.yaml
+
+# 5. Dashboard
+minikube dashboard
+minikube addons enable metrics-server
+
+# 6. Доступ к интерфейсам
+kubectl port-forward -n monitoring svc/prometheus-operated 9090:9090
+kubectl port-forward -n monitoring svc/prometheus-grafana 8080:80
+
+
+Генерация трафика (PowerShell)
+powershell
+
+minikube service lr4-main-service --url
+
+# Простой тест
+$url = "http://127.0.0.1:ВАШ_ПОРТ/metrics"
+for ($i=0; $i -lt 30; $i++) { 
+    Invoke-WebRequest $url
+    Write-Host "Request $i" -ForegroundColor Green
+    Start-Sleep -Milliseconds 200
+}
+
+Тест с разной нагрузкой:
+powershell
+$url = "http://127.0.0.1:ВАШ_ПОРТ/metrics"
+
+# Этап 1: Низкая нагрузка
+Write-Host "=== Low load ==="
+for ($i=0; $i -lt 10; $i++) { 
+    Invoke-WebRequest $url
+    Start-Sleep -Seconds 1
+}
+
+# Этап 2: Высокая нагрузка  
+Write-Host "=== High load ==="
+for ($i=0; $i -lt 50; $i++) { 
+    Invoke-WebRequest $url
+    Start-Sleep -Milliseconds 50
+}
